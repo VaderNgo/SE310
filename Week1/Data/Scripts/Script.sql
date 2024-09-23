@@ -1,0 +1,12 @@
+CREATE DATABASE WEEK1
+USE WEEK1
+
+
+CREATE TABLE ANIMALS (
+    id VARCHAR(255) PRIMARY KEY,
+    type VARCHAR(255) NOT NULL,
+    milkProduced FLOAT DEFAULT 0.0
+);
+
+
+select * from animals
