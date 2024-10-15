@@ -6,6 +6,8 @@ namespace Bai_tap_4.Controllers
 {
     public class HomeController : Controller
     {
+
+        QlbanVaLiContext db = new QlbanVaLiContext();
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -15,7 +17,8 @@ namespace Bai_tap_4.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var listSanPham = db.TDanhMucSps.ToList(); 
+            return View(listSanPham);
         }
 
         public IActionResult Privacy()
