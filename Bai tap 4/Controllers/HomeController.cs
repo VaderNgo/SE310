@@ -21,9 +21,15 @@ namespace Bai_tap_4.Controllers
         {
             int pageSize = 8;
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
-            var listSanPham = db.TDanhMucSps.AsNoTracking().OrderBy(x=>x.TenSp);
+            var listSanPham = db.TDanhMucSps.AsNoTracking().OrderBy(x => x.TenSp);
             PagedList<TDanhMucSp> list = new PagedList<TDanhMucSp>(listSanPham, pageNumber, pageSize);
             return View(list);
+        }
+
+        public IActionResult SanPhamTheoLoai(string maLoaiSp)
+        {
+            List<TDanhMucSp> listSanpham = db.TDanhMucSps.Where(x => x.MaLoai == maLoaiSp).ToList();
+            return View(listSanpham);
         }
 
         public IActionResult Privacy()
