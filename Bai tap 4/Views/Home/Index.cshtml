@@ -2,7 +2,8 @@
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_LayoutOgani.cshtml";
 }
-@model List<TDanhMucSp>
+@using X.PagedList.Mvc.Core;
+@model X.PagedList.IPagedList<TDanhMucSp>
 @foreach (var item in Model)
 {
     <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
@@ -21,3 +22,6 @@
         </div>
     </div>
 })
+<div class="product__pagination">
+@Html.PagedListPager(Model,page=> Url.Action("Index", new { page= page }))
+</div>

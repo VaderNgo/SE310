@@ -1,7 +1,15 @@
+using Bai_tap_4.Models;
+using Bai_tap_4.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var connectionString = builder.Configuration.GetConnectionString("QlbanVaLiContext");
+builder.Services.AddDbContext<QlbanVaLiContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddScoped<ILoaiSpRepository, LoaiSpRepository>();
 
 var app = builder.Build();
 

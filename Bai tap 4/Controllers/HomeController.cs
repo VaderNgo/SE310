@@ -1,6 +1,8 @@
 using Bai_tap_4.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using X.PagedList;
 
 namespace Bai_tap_4.Controllers
 {
@@ -15,10 +17,13 @@ namespace Bai_tap_4.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
-            var listSanPham = db.TDanhMucSps.ToList(); 
-            return View(listSanPham);
+            int pageSize = 8;
+            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+            var listSanPham = db.TDanhMucSps.AsNoTracking().OrderBy(x=>x.TenSp);
+            PagedList<TDanhMucSp> list = new PagedList<TDanhMucSp>(listSanPham, pageNumber, pageSize);
+            return View(list);
         }
 
         public IActionResult Privacy()
