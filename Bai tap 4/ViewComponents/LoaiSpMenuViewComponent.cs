@@ -1,21 +1,20 @@
-﻿using Bai_tap_4.Repositories;
+﻿using BaiTap4.Models;
+using BaiTap4.Repository;
 using Microsoft.AspNetCore.Mvc;
-namespace Bai_tap_4.ViewComponents
+
+namespace BaiTap4.ViewComponents
 {
-    public class LoaiSpMenuViewComponent
-        : ViewComponent
-    {
-        private readonly ILoaiSpRepository _loaiSpRepository;
-        public LoaiSpMenuViewComponent(ILoaiSpRepository loaiSpRepository)
-        {
-            _loaiSpRepository = loaiSpRepository;
-        }
-
-        public IViewComponentResult Invoke()
-        {
-            var loaiSps = _loaiSpRepository.GetAllLoaiSp();
-            return View(loaiSps);
-        }
-
-    }
+	public class LoaiSpMenuViewComponent : ViewComponent
+	{
+		private readonly ILoaiSpRepository _loaiSp;
+		public LoaiSpMenuViewComponent(ILoaiSpRepository loaiSpRepository)
+		{
+			_loaiSp = loaiSpRepository;
+		}
+		public IViewComponentResult Invoke()
+		{
+			var loaiSp = _loaiSp.GetAllLoaiSp().OrderBy(x => x.Loai);
+			return View(loaiSp);
+		}
+	}
 }

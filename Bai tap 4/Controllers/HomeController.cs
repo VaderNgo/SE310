@@ -1,14 +1,15 @@
-using Bai_tap_4.Models;
+using BaiTap4.Models;
+using BaiTap4.Models.Authentication;
+using BaiTap4.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using X.PagedList;
 
-namespace Bai_tap_4.Controllers
+namespace BaiTap4.Controllers
 {
     public class HomeController : Controller
     {
-
         QlbanVaLiContext db = new QlbanVaLiContext();
         private readonly ILogger<HomeController> _logger;
 
@@ -17,22 +18,48 @@ namespace Bai_tap_4.Controllers
             _logger = logger;
         }
 
+        //[Authentication]
         public IActionResult Index(int? page)
         {
             int pageSize = 8;
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
-            var listSanPham = db.TDanhMucSps.AsNoTracking().OrderBy(x => x.TenSp);
-            PagedList<TDanhMucSp> list = new PagedList<TDanhMucSp>(listSanPham, pageNumber, pageSize);
-            return View(list);
+			var lstsanpham = db.TDanhMucSps.AsNoTracking().OrderBy(x => x.TenSp);
+            PagedList<TDanhMucSp> lst = new PagedList<TDanhMucSp>(lstsanpham, pageNumber, pageSize);
+			return View(lst);
         }
+        //[Authentication]
 
-        public IActionResult SanPhamTheoLoai(string maLoaiSp)
+        public IActionResult SanPhamTheoLoai(String maLoai, int? page)
         {
-            List<TDanhMucSp> listSanpham = db.TDanhMucSps.Where(x => x.MaLoai == maLoaiSp).ToList();
-            return View(listSanpham);
+			int pageSize = 8;
+			int pageNumber = page == null || page < 0 ? 1 : page.Value;
+			var lstsanpham = db.TDanhMucSps.AsNoTracking().Where(x=>x.MaLoai == maLoai).OrderBy(x => x.TenSp);
+			PagedList<TDanhMucSp> lst = new PagedList<TDanhMucSp>(lstsanpham, pageNumber, pageSize);
+            ViewBag.maLoai = maLoai;
+			return View(lst);
+		}
+        //[Authentication]
+        public IActionResult ChiTietSanPham(String maSp)
+		{
+			var sanpham = db.TDanhMucSps.SingleOrDefault(x => x.MaSp == maSp);
+            var anhSanPham = db.TAnhSps.Where(x => x.MaSp == maSp).ToList();
+			ViewBag.anhSanPham = anhSanPham;
+			return View(sanpham);
+		}
+
+        public IActionResult ProductDetail(String maSp)
+        {
+			var sanpham = db.TDanhMucSps.SingleOrDefault(x => x.MaSp == maSp);
+			var anhSanPham = db.TAnhSps.Where(x => x.MaSp == maSp).ToList();
+            var homeProductDetailViewModel = new HomeProductDetailViewModel
+			{
+				danhMucSp = sanpham,
+				anhSps = anhSanPham
+			};
+			return View(homeProductDetailViewModel);
         }
 
-        public IActionResult Privacy()
+		public IActionResult Privacy()
         {
             return View();
         }
